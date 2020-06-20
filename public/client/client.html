@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div id="app">
+    <h3>Client</h3>
+    <p>What's up? Welcome to the client page!</p>
+    <a href="../">Back to homepage</a>
+    <button v-on:click="sendMessage">Send server message</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el:'#app',
+      data: function(){
+        return { 
+          socket: new WebSocket('ws://localhost:3200')
+        }
+      },
+      methods: {
+        sendMessage(){
+          this.socket.send(prompt('what do you want to say?'));
+          console.log('e')
+        }
+      },
+      mounted() {
+        this.socket.addEventListener('open',function(){
+          alert('Welcome to the server - client page.');
+        });
+        
+        this.socket.addEventListener('close',function(){
+          alert('Disconected from the server - client page.');
+        })     
+        
+        this.socket.addEventListener('message',function(msg){
+          alert('Server says: ' + msg.data);
+        })
+      }
+    })
+  </script>
+</body>
+</html>

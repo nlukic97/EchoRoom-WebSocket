@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <h3>Hello</h3>
+    <p>yo whats up</p>
+    <p>Server message:</p>
+    <p>{{message}}</p>
+
+    <input v-model="message" type="text"> <!-- dakle menja se vrednost i ovako radi, ali nesto ws ga zeza-->
+
+    <a href="./client/client.html">Client page</a>
+    <button v-on:click="sendMessage">Send server message</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el:'#app',
+      data: function(){
+        return { 
+          socket: new WebSocket('ws://localhost:3200'),
+          recievedMessage:'',
+          message: "No message from server yet."
+        }
+      },
+      methods: {
+        sendMessage(){
+          this.socket.send(prompt('what do you want to say?'));
+        },
+        updateMessageText(){
+          this.message = this.recievedMessage;
+        }
+      },
+      mounted() {
+        this.socket.addEventListener('open',function(){
+          alert('Welcome to the server user.');
+        });
+        
+        this.socket.addEventListener('close',function(){
+          alert('Disconected from the server.');
+        })     
+        
+        this.socket.addEventListener('message',function(msg){
+          alert('Server says: ' + msg.data);
+          this.recievedMessage = JSON.stringify(msg.data);
+          console.log(this.recievedMessage) // works
+          updateMessageText(); // does not work. The moustache will not change to show recieved message
+        })
+      }
+    })
+  </script>
+</body>
+</html>
