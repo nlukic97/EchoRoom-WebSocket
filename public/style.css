@@ -1,5 +1,6 @@
 body {
   text-align: center;
+  font-family:"Helvetica",sans-serif;
 }
 
 a {
@@ -17,4 +18,36 @@ a {
 a:hover {
   transform: scale(1.2);
   transition: 0.3s transform;
+}
+
+img {
+  width:30%;
+}
+
+ul {
+  margin:0;
+  padding:0;
+  border:1px solid #333;
+  width: 60%;
+  margin: 0 auto;
+}
+
+ul li {
+  list-style-type: none;
+  margin:0;
+  padding: 13px 10px;
+}
+
+ul li.you {
+  text-align: right; 
+  /* width:50%; ne znam kako da nparavim da mi text ode u novu liniju */
+  background-color: rgb(233, 72, 72);
+}
+
+ul li.other {
+  text-align: left;
+}
+
+.bold {
+  font-weight: bold;
 }

@@ -8,15 +8,20 @@
 </head>
 <body>
   <div id="app">
-    <h3>Hello</h3>
-    <p>yo whats up</p>
-    <p>Server message:</p>
-    <p>{{message}}</p>
-
-    <input v-model="message" type="text"> <!-- dakle menja se vrednost i ovako radi, ali nesto ws ga zeza-->
+    <h1>Home page</h1>
+    <p>Welcome to the home page.</p>
+    <h3>Chat:</h3>
+    <ul>
+      <li class="you"><span class="bold">You: </span>{{sentMessage[0]}}</li>
+      <br>
+      <li class="other"><span class="bold">Server: </span>{{recievedMessage[0]}}</li>
+      <p>{{recievedMessage[2]}}</p>
+    </ul>
 
     <a href="./client/client.html">Client page</a>
     <button v-on:click="sendMessage">Send server message</button>
+    <button v-on:click="connect">Re-connect</button>
+    <button v-on:click="disconnect">Disconnect</button>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
@@ -25,32 +30,70 @@
       data: function(){
         return { 
           socket: new WebSocket('ws://localhost:3200'),
-          recievedMessage:'',
+          sentMessage:[
+            'Hello server!',
+            'Whats up server?'
+          ],
+          recievedMessage:[
+            'Hello',
+            'Eeee'
+          ],
           message: "No message from server yet."
         }
       },
       methods: {
         sendMessage(){
-          this.socket.send(prompt('what do you want to say?'));
+          var newMsg = prompt('what do you want to say?')
+          console.log("message sent to server: " + newMsg)
+          this.socket.send(newMsg);
+
+
+          var chatBox = document.querySelector('ul')
+          var newLi = document.createElement('li');
+          var span = document.createElement('span')
+          span.classList.add('bold')
+          span.appendChild(document.createTextNode('You: '))
+          var text = document.createTextNode(newMsg);
+          newLi.appendChild(span);
+          newLi.appendChild(text);
+          newLi.classList.add('you')
+          document.querySelector('ul').appendChild(newLi);
         },
-        updateMessageText(){
-          this.message = this.recievedMessage;
+        disconnect(){
+          this.socket.close()
+          console.log("You have just disconnected yourself from the server")
+        },
+        connect(){
+          // Not sure how
         }
       },
       mounted() {
         this.socket.addEventListener('open',function(){
           alert('Welcome to the server user.');
+          console.log("You are now connected")
         });
         
         this.socket.addEventListener('close',function(){
           alert('Disconected from the server.');
+          console.log("You are now disconencted from the server")
         })     
         
         this.socket.addEventListener('message',function(msg){
           alert('Server says: ' + msg.data);
-          this.recievedMessage = JSON.stringify(msg.data);
-          console.log(this.recievedMessage) // works
-          updateMessageText(); // does not work. The moustache will not change to show recieved message
+          console.log("message recieved from server: " + msg.data)
+          //this.recievedMessage.unshift('msg.data') // ne radi uopste, i mustaci se ne bi ni menjali.
+
+          var chatBox = document.querySelector('ul')
+          var newLi = document.createElement('li');
+          var span = document.createElement('span')
+          span.classList.add('bold')
+          span.appendChild(document.createTextNode('Server: '))
+          var text = document.createTextNode(msg.data);
+          newLi.appendChild(span);
+          newLi.appendChild(text);
+          newLi.classList.add('other')
+          document.querySelector('ul').appendChild(newLi);
+         
         })
       }
     })
