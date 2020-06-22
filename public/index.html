@@ -64,7 +64,14 @@
           console.log("You have just disconnected yourself from the server")
         },
         connect(){
-          // Not sure how
+          this.socket = '';
+          this.socket = new WebSocket('ws://localhost:3200')
+          this.socket.addEventListener('open',function(){
+            alert('Reconnected to the server');
+            console.log('reconnected to the server')
+          })
+          //ovde mora da stoji izgleda   this.socket.addEventListener('message')
+          //https://www.tutorialspoint.com/How-to-reconnect-to-websocket-after-close-connection-with-HTML
         }
       },
       mounted() {
