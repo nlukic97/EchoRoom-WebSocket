@@ -81,7 +81,7 @@
         this.socket.addEventListener('message',function(msg){
           alert('Server says: ' + msg.data);
           console.log("message recieved from server: " + msg.data)
-          //this.recievedMessage.unshift('msg.data') // ne radi uopste, i mustaci se ne bi ni menjali.
+          //this.recievedMessage.push('msg.data') // ne radi uopste, i mustaci se ne bi ni menjali.
 
           var chatBox = document.querySelector('ul')
           var newLi = document.createElement('li');
