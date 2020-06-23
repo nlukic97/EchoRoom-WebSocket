@@ -1,6 +1,7 @@
 body {
   text-align: center;
   font-family:"Helvetica",sans-serif;
+  box-sizing: border-box;
 }
 
 a {
@@ -30,6 +31,7 @@ ul {
   border:1px solid #333;
   width: 60%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 ul li {
@@ -48,6 +50,29 @@ ul li.other {
   text-align: left;
 }
 
+
 .bold {
   font-weight: bold;
+}
+
+#inputContainer {
+  width:60%;
+  margin: 0 auto;
+}
+input {
+  padding:10px 10px;
+  width: 100%;
+  display: block;
+  margin:0 auto;
+  border:1px solid #333;
+  border-top: none;
+  box-sizing: border-box;
+}
+
+.flexNav { /*for navigation component -> found in nav.js*/
+  display: flex;
+  justify-content: center;
+  border:none;
+  width:60%;
+  margin:0 auto;
 }
